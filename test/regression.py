@@ -1,4 +1,5 @@
 from numpy import *
+import matplotlib.pylab as plt
 def loadDataSet(fileName):
     numFeat = len(open(fileName).readline().split('\t')) - 1
     dataMat = []; labelMat = []
@@ -18,12 +19,24 @@ def standRegres(xArr, yArr):
     if linalg.det(xTx) == 0.0:
         print "This matrix is singular, cannot do inverse"
         return
-    ws = xTx.I * (xMat.t * yMat)
-    return
+    ws = xTx.I * (xMat.T * yMat)
+    return ws
 
 if __name__ == "__main__":
-    xArr, yArr =loadDataSet('ex1.txt')
-    print xArr[0:2]
+    xArr, yArr =loadDataSet('ex0.txt')
+    ws = standRegres(xArr, yArr)
+    xMat = mat(xArr)
+    yMat = mat(yArr)
+    print ws,
+    yHat = xMat * ws
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(xMat[:, 1].flatten().A[0], yMat.T[:, 0].flatten().A[0])
+    xCopy = xMat.copy()
+    xCopy.sort(0)
+    yHat = xCopy * ws
+    ax.plot(xCopy[:, 1], yHat)
+    plt.show()
 
 
 
